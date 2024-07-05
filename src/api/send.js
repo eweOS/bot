@@ -1,0 +1,93 @@
+import { apiUrl } from "./webhook";
+
+async function sendMarkdownV2Text(chatId, text, replyId = null) {
+  return (
+    await fetch(
+      apiUrl("sendMessage", {
+        chat_id: chatId,
+        text,
+        parse_mode: "MarkdownV2",
+        reply_to_message_id: replyId,
+      })
+    )
+  ).json();
+}
+
+async function sendPlainText(chatId, text, replyId = null) {
+  return (
+    await fetch(
+      apiUrl("sendMessage", {
+        chat_id: chatId,
+        text,
+        reply_to_message_id: replyId,
+      })
+    )
+  ).json();
+}
+
+function escapeMarkdown(str, except = "") {
+  const all = "_*[]()~`>#+-=|{}.!\\"
+    .split("")
+    .filter((c) => !except.includes(c));
+  const regExSpecial = "^$*+?.()|{}[]\\";
+  const regEx = new RegExp(
+    "[" +
+      all.map((c) => (regExSpecial.includes(c) ? "\\" + c : c)).join("") +
+      "]",
+    "gim"
+  );
+  return str.replace(regEx, "\\$&");
+}
+
+async function sendInlineButton(chatId, text, button) {
+  return sendInlineButtonRow(chatId, text, [button]);
+}
+
+async function sendInlineButtonRow(chatId, text, buttonRow) {
+  return sendInlineButtons(chatId, text, [buttonRow]);
+}
+
+async function sendFetchResult(chatId, response, replyId = null) {
+  if (response.status != 204)
+    await sendPlainText(
+      chatId,
+      `${response.status}: ${response.statusText}`,
+      replyId
+    );
+  else await sendPlainText(chatId, "Done!", replyId);
+}
+
+async function sendInlineButtons(chatId, text, buttons) {
+  return (
+    await fetch(
+      apiUrl("sendMessage", {
+        chat_id: chatId,
+        reply_markup: JSON.stringify({
+          inline_keyboard: buttons,
+        }),
+        text,
+      })
+    )
+  ).json();
+}
+
+async function answerCallbackQuery(callbackQueryId, text = null) {
+  const data = {
+    callback_query_id: callbackQueryId,
+  };
+  if (text) {
+    data.text = text;
+  }
+  return (await fetch(apiUrl("answerCallbackQuery", data))).json();
+}
+
+export {
+  sendMarkdownV2Text,
+  sendPlainText,
+  escapeMarkdown,
+  sendInlineButton,
+  sendInlineButtonRow,
+  sendInlineButtons,
+  answerCallbackQuery,
+  sendFetchResult,
+};
