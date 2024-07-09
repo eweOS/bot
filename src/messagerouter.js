@@ -13,13 +13,7 @@ async function commandrouter(message) {
     if ("filter" in modules[command])
       if (modules[command].filter(command_args))
         await exec_cmd_fn(message, command_args);
-      else
-        await sendPlainText(
-          message.chat.id,
-          "Invalid argument",
-          message.message_id
-        );
-    else await exec_cmd_fn(message);
+      else await exec_cmd_fn(message);
   }
 }
 

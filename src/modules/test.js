@@ -1,4 +1,4 @@
-import { sendPlainText } from "../api/send";
+import { sendPlainText, sendReaction } from "../api/send";
 
 const mod = {
   command: "/test",
@@ -7,6 +7,7 @@ const mod = {
 
 async function mod_fn(message, args) {
   await sendPlainText(message.chat.id, "test");
+  await sendReaction(message.chat.id, message.message_id);
 }
 
 export default mod;

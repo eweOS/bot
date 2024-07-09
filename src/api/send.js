@@ -25,6 +25,22 @@ async function sendPlainText(chatId, text, replyId = null) {
   ).json();
 }
 
+async function sendReaction(
+  chatId,
+  msgId,
+  reactions = [{ type: "emoji", emoji: "🎉" }]
+) {
+  return (
+    await fetch(
+      apiUrl("setMessageReaction", {
+        reaction: JSON.stringify(reactions),
+        chat_id: chatId,
+        message_id: msgId,
+      })
+    )
+  ).json();
+}
+
 function escapeMarkdown(str, except = "") {
   const all = "_*[]()~`>#+-=|{}.!\\"
     .split("")
@@ -54,7 +70,7 @@ async function sendFetchResult(chatId, response, replyId = null) {
       `${response.status}: ${response.statusText}`,
       replyId
     );
-  else await sendPlainText(chatId, "Done!", replyId);
+  else if (replyId) await sendReaction(chatId, replyId);
 }
 
 async function sendInlineButtons(chatId, text, buttons) {
@@ -90,4 +106,5 @@ export {
   sendInlineButtons,
   answerCallbackQuery,
   sendFetchResult,
+  sendReaction,
 };
