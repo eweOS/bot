@@ -1,20 +1,22 @@
 import * as process from "node:process";
 import modules from "./modules";
 import { checkmessage } from "./filter";
-import { sendPlainText } from "./api/send";
+import { sendReactionSimple } from "./api/send";
 
 async function commandrouter(message) {
-  const command = message.text.split(" ")[0];
+  var command = message.text.split(" ")[0];
+  var standard_command = command.replace("@eweos_bot", "");
   let command_args = null;
   if (message.text.trim() !== command)
     command_args = message.text.slice(command.length + 1).trim();
-  if (command in modules) {
-    const exec_cmd_fn = modules[command].func;
-    if ("filter" in modules[command])
-      if (modules[command].filter(command_args))
+  if (standard_command in modules) {
+    const exec_cmd_fn = modules[standard_command].func;
+    if ("filter" in modules[standard_command]) {
+      if (modules[standard_command].filter(command_args))
         await exec_cmd_fn(message, command_args);
-      else await exec_cmd_fn(message);
-  }
+      else await sendReactionSimple(message.chat.id, message.message_id, "🤨");
+    } else await exec_cmd_fn(message, command_args);
+  } else await sendReactionSimple(message.chat.id, message.message_id, "🤷");
 }
 
 async function messagetyperouter(update) {

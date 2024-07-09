@@ -25,6 +25,10 @@ async function sendPlainText(chatId, text, replyId = null) {
   ).json();
 }
 
+async function sendReactionSimple(chatId, msgId, reaction = "🎉") {
+  return sendReaction(chatId, msgId, [{ type: "emoji", emoji: reaction }]);
+}
+
 async function sendReaction(
   chatId,
   msgId,
@@ -64,13 +68,14 @@ async function sendInlineButtonRow(chatId, text, buttonRow) {
 }
 
 async function sendFetchResult(chatId, response, replyId = null) {
-  if (response.status != 204)
+  if (response.status != 204) {
     await sendPlainText(
       chatId,
       `${response.status}: ${response.statusText}`,
       replyId
     );
-  else if (replyId) await sendReaction(chatId, replyId);
+    await sendReactionSimple(chatId, replyId, "😢");
+  } else if (replyId) await sendReactionSimple(chatId, replyId);
 }
 
 async function sendInlineButtons(chatId, text, buttons) {
@@ -107,4 +112,5 @@ export {
   answerCallbackQuery,
   sendFetchResult,
   sendReaction,
+  sendReactionSimple,
 };
