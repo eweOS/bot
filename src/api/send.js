@@ -1,12 +1,17 @@
 import { apiUrl } from "./webhook";
 
-async function sendMarkdownV2Text(chatId, text, replyId = null) {
+async function sendMarkdownText(
+  chatId,
+  text,
+  replyId = null,
+  markdown_mode = "MarkdownV2"
+) {
   return (
     await fetch(
       apiUrl("sendMessage", {
         chat_id: chatId,
         text,
-        parse_mode: "MarkdownV2",
+        parse_mode: markdown_mode,
         reply_to_message_id: replyId,
       })
     )
@@ -103,7 +108,6 @@ async function answerCallbackQuery(callbackQueryId, text = null) {
 }
 
 export {
-  sendMarkdownV2Text,
   sendPlainText,
   escapeMarkdown,
   sendInlineButton,
@@ -113,4 +117,5 @@ export {
   sendFetchResult,
   sendReaction,
   sendReactionSimple,
+  sendMarkdownText,
 };

@@ -4,6 +4,7 @@ import { checkmessage } from "./filter";
 import { sendReactionSimple } from "./api/send";
 
 async function commandrouter(message) {
+  if (!message.text.startsWith("/")) return;
   var command = message.text.split(" ")[0];
   var standard_command = command.replace("@eweos_bot", "");
   let command_args = null;
@@ -11,17 +12,29 @@ async function commandrouter(message) {
     command_args = message.text.slice(command.length + 1).trim();
   if (standard_command in modules) {
     const exec_cmd_fn = modules[standard_command].func;
-    if ("filter" in modules[standard_command]) {
-      if (modules[standard_command].filter(command_args))
-        await exec_cmd_fn(message, command_args);
-      else await sendReactionSimple(message.chat.id, message.message_id, "🤨");
-    } else await exec_cmd_fn(message, command_args);
+    if ("context_filter" in modules[standard_command])
+      if (!modules[standard_command].context_filter(message)) {
+        await sendReactionSimple(message.chat.id, message.message_id, "🙊");
+        return;
+      }
+    if ("filter" in modules[standard_command])
+      if (!modules[standard_command].filter(command_args)) {
+        await sendReactionSimple(message.chat.id, message.message_id, "🤨");
+        return;
+      }
+    await exec_cmd_fn(message, command_args);
   } else await sendReactionSimple(message.chat.id, message.message_id, "🤷");
 }
 
 async function messagetyperouter(update) {
   if ("message" in update) {
     if (checkmessage(update.message)) await commandrouter(update.message);
+    else
+      await sendReactionSimple(
+        update.message.chat.id,
+        update.message.message_id,
+        "🤡"
+      );
   }
 }
 
