@@ -1,4 +1,4 @@
-import { sendPlainText, sendReactionSimple } from "../api/send";
+import { sendPlainText, sendReactionSimple } from "../../api/send";
 
 const mod = {
   command: "/test",

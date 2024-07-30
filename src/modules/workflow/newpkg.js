@@ -1,6 +1,6 @@
-import { sendFetchResult } from "../api/send";
-import { dispatchWorkflow } from "../api/github";
-import { testarg_pkgname } from "../cmdargs";
+import { sendFetchResult } from "../../api/send";
+import { dispatchWorkflow } from "../../api/github";
+import { testarg_pkgname } from "../../utils/cmdargs";
 
 const mod = {
   command: "/newpkg",

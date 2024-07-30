@@ -1,10 +1,12 @@
 import { apiUrl } from "./webhook";
 
-async function sendMarkdownText(
+async function sendRichText(
   chatId,
   text,
   replyId = null,
-  markdown_mode = "MarkdownV2"
+  markdown_mode = "MarkdownV2",
+  disable_link_preview = false,
+  disable_notification = false
 ) {
   return (
     await fetch(
@@ -13,6 +15,10 @@ async function sendMarkdownText(
         text,
         parse_mode: markdown_mode,
         reply_to_message_id: replyId,
+        link_preview_options: JSON.stringify({
+          is_disabled: disable_link_preview,
+        }),
+        disable_notification: disable_notification,
       })
     )
   ).json();
@@ -117,5 +123,5 @@ export {
   sendFetchResult,
   sendReaction,
   sendReactionSimple,
-  sendMarkdownText,
+  sendRichText,
 };

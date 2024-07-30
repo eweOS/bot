@@ -1,7 +1,7 @@
 import * as process from "node:process";
-import modules from "./modules";
-import { checkmessage } from "./filter";
-import { sendReactionSimple } from "./api/send";
+import modules from "../modules/workflow";
+import { checkmessage } from "../filter";
+import { sendReactionSimple } from "../api/send";
 
 async function commandrouter(message) {
   if (!message.text.startsWith("/")) return;

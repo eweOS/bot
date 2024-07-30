@@ -18,4 +18,19 @@ async function dispatchWorkflow(workflow, data) {
   );
 }
 
-export { dispatchWorkflow };
+async function dispatchRepository(event_type, data) {
+  return await fetch("https://api.github.com/repos/eweOS/workflow/dispatches", {
+    body: JSON.stringify({
+      event_type: event_type,
+      client_payload: data,
+    }),
+    method: "POST",
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${process.env.ENV_GITHUB_TOKEN}`,
+      "User-Agent": "request",
+    },
+  });
+}
+
+export { dispatchWorkflow, dispatchRepository };

@@ -1,10 +1,10 @@
-import { sendFetchResult } from "../api/send";
-import { dispatchWorkflow } from "../api/github";
+import { sendFetchResult } from "../../api/send";
+import { dispatchWorkflow } from "../../api/github";
 import {
   split_command_once,
   testarg_pkgname,
   testarg_string_not_quoted,
-} from "../cmdargs";
+} from "../../utils/cmdargs";
 
 const mod = {
   command: "/bumprel",

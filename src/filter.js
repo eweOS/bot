@@ -1,3 +1,6 @@
+import * as process from "node:process";
+import { hmacverify } from "./utils/webhooksign";
+
 function checkmessage(message) {
   const allowed_users = [
     283338155, // @YukariChiba
@@ -17,4 +20,26 @@ function checkmessage(message) {
   return true;
 }
 
-export { checkmessage };
+async function checkwebhook(request, payload) {
+  if (request.method !== "POST") return false;
+
+  const contentType = request.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) return false;
+
+  const hooktype = request.headers.get("X-GitHub-Event");
+  if (!hooktype) return false;
+
+  const signature = request.headers.get("X-Hub-Signature");
+  if (!signature) return false;
+
+  const ver = await hmacverify(
+    process.env.ENV_GITHUB_WEBHOOK_TOKEN,
+    JSON.stringify(payload),
+    signature.replace("sha1=", "")
+  );
+  if (!ver) return false;
+
+  return true;
+}
+
+export { checkmessage, checkwebhook };

@@ -1,6 +1,6 @@
 import { registerWebhook, unRegisterWebhook } from "./api/webhook";
-import { messagerouter } from "./messagerouter";
-import { dispatchWorkflow } from "./api/github";
+import { messagerouter } from "./router/messagerouter";
+import { webhookrouter } from "./router/webhookrouter";
 
 function urlrouter(request, ctx) {
   const url = new URL(request.url);
@@ -14,6 +14,9 @@ function urlrouter(request, ctx) {
 
     case "/unRegisterWebhook":
       return unRegisterWebhook(request);
+
+    case "/github":
+      return webhookrouter(request);
 
     default:
       return new Response("No handler for this request");

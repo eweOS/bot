@@ -1,6 +1,6 @@
-import { sendMarkdownText, sendReactionSimple } from "../api/send";
-import { getpkginfo } from "../api/http";
-import { testarg_pkgname } from "../cmdargs";
+import { sendRichText, sendReactionSimple } from "../../api/send";
+import { getpkginfo } from "../../api/http";
+import { testarg_pkgname } from "../../utils/cmdargs";
 
 const mod = {
   command: "/pkginfo",
@@ -23,7 +23,7 @@ async function mod_fn(message, args) {
     replytext += `*${k}*: \`${resjson[k]}\`\n`;
   });
   //replytext = escapeMarkdown(replytext);
-  await sendMarkdownText(message.chat.id, replytext, message.message_id);
+  await sendRichText(message.chat.id, replytext, message.message_id);
 }
 
 export default mod;
