@@ -1,5 +1,17 @@
 import * as process from "node:process";
 
+async function getPackagePR(pr_id) {
+  return await fetch("https://api.github.com/repos/eweOS/packages/pulls/" + pr_id,
+    {
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${process.env.ENV_GITHUB_TOKEN}`,
+        "User-Agent": "request",
+      },
+    }
+  )
+}
+
 async function dispatchWorkflow(workflow, data) {
   return await fetch(
     `https://api.github.com/repos/eweOS/workflow/actions/workflows/${workflow}/dispatches`,
@@ -33,4 +45,4 @@ async function dispatchRepository(event_type, data) {
   });
 }
 
-export { dispatchWorkflow, dispatchRepository };
+export { dispatchWorkflow, dispatchRepository, getPackagePR };

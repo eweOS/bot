@@ -10,6 +10,10 @@ function split_command_once(args, split = " ") {
   return { first: first_elem, remains: remains_elem };
 }
 
+function testarg_number(arg) {
+  return /^\d+$/.test(arg);
+}
+
 function testarg_pkgname(arg) {
   if (!arg) return false;
   const regex = new RegExp("^[.0-9a-zA-Z_-]+$", "g");
@@ -21,4 +25,4 @@ function testarg_string_not_quoted(arg) {
   return regex.test(arg);
 }
 
-export { split_command_once, testarg_pkgname, testarg_string_not_quoted };
+export { split_command_once, testarg_pkgname, testarg_string_not_quoted, testarg_number };

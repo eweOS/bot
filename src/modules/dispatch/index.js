@@ -1,7 +1,7 @@
 let modules = {};
 
-import workflow_mod from "./workflow";
-import pull_mod from "./pull";
+import workflow_mod from "./workflow_run";
+import pull_mod from "./pull_request";
 import push_mod from "./push";
 
 function add_mod(mod) {
