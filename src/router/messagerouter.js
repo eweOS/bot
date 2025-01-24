@@ -28,6 +28,7 @@ async function commandrouter(message) {
 
 async function messagetyperouter(update) {
   if ("message" in update) {
+    if (! ("text" in update.message)) return;
     if (checkmessage(update.message)) await commandrouter(update.message);
     else
       await sendReactionSimple(
