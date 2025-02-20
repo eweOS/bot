@@ -15,18 +15,15 @@ async function mod_fn(message, args) {
     await sendReactionSimple(message.chat.id, message.message_id, "🤷");
     return;
   }
-  const payload = await res.json();
+  const payload = res.data;
   if (payload.state == "open" && !payload.draft) {
-    await dispatch_mod.func(
-      {
-        action: "synchronize",
-        repository: { full_name: "eweOS/packages" },
-        pull_request: payload
-      }
-    );
+    await dispatch_mod.func({
+      action: "synchronize",
+      repository: { full_name: "eweOS/packages" },
+      pull_request: payload,
+    });
     await sendReactionSimple(message.chat.id, message.message_id, "🎉");
-  } else
-    await sendReactionSimple(message.chat.id, message.message_id, "🥱");
+  } else await sendReactionSimple(message.chat.id, message.message_id, "🥱");
 }
 
 export default mod;

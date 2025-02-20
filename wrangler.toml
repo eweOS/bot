@@ -5,3 +5,5 @@ compatibility_flags = [ "nodejs_compat" ]
 
 [vars]
 ENV_BOT_WORKFLOW_CHANNEL = "-1002247523652"
+ENV_GITHUB_APP_ID = "337143"
+ENV_GITHUB_APP_INSTALL = "37785080"

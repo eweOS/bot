@@ -1,48 +1,82 @@
 import * as process from "node:process";
+import { App } from "octokit";
+
+async function initOctokit() {
+  const app = new App({
+    appId: process.env.ENV_GITHUB_APP_ID,
+    privateKey: process.env.ENV_GITHUB_APP_KEY,
+  });
+  return await app.getInstallationOctokit(process.env.ENV_GITHUB_APP_INSTALL);
+}
 
 async function getPackagePR(pr_id) {
-  return await fetch("https://api.github.com/repos/eweOS/packages/pulls/" + pr_id,
-    {
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${process.env.ENV_GITHUB_TOKEN}`,
-        "User-Agent": "request",
-      },
-    }
-  )
+  return await (
+    await initOctokit()
+  ).request(`GET /repos/eweOS/packages/pulls/${pr_id}`);
 }
 
 async function dispatchWorkflow(workflow, data) {
-  return await fetch(
-    `https://api.github.com/repos/eweOS/workflow/actions/workflows/${workflow}/dispatches`,
+  return await (
+    await initOctokit()
+  ).request(
+    `POST /repos/eweOS/workflow/actions/workflows/${workflow}/dispatches`,
     {
-      body: JSON.stringify({
+      body: {
         ref: "master",
         inputs: data,
-      }),
-      method: "POST",
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${process.env.ENV_GITHUB_TOKEN}`,
-        "User-Agent": "request",
       },
-    }
+    },
   );
 }
 
 async function dispatchRepository(event_type, data) {
-  return await fetch("https://api.github.com/repos/eweOS/workflow/dispatches", {
-    body: JSON.stringify({
-      event_type: event_type,
-      client_payload: data,
-    }),
-    method: "POST",
-    headers: {
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${process.env.ENV_GITHUB_TOKEN}`,
-      "User-Agent": "request",
-    },
+  return await (
+    await initOctokit()
+  ).request(`POST /repos/eweOS/workflow/dispatches`, {
+    event_type: event_type,
+    client_payload: data,
   });
 }
 
-export { dispatchWorkflow, dispatchRepository, getPackagePR };
+async function commentIssue(issue_number, comment) {
+  return await (
+    await initOctokit()
+  ).request(`POST /repos/eweOS/packages/issues/${issue_number}/comments`, {
+    body: comment,
+  });
+}
+
+async function labelIssue(issue_number, labels) {
+  return await (
+    await initOctokit()
+  ).request(`POST /repos/eweOS/packages/issues/${issue_number}/labels`, {
+    labels: labels,
+  });
+}
+
+async function delabelIssue(issue_number, label) {
+  return await (
+    await initOctokit()
+  ).request(
+    `DELETE /repos/eweOS/packages/issues/${issue_number}/labels/${label}`,
+  );
+}
+
+async function reactIssueComment(comment_number, reaction) {
+  return await (
+    await initOctokit()
+  ).request(
+    `POST /repos/eweOS/packages/issues/comments/${comment_number}/reactions`,
+    { content: reaction },
+  );
+}
+
+export {
+  dispatchWorkflow,
+  dispatchRepository,
+  getPackagePR,
+  commentIssue,
+  labelIssue,
+  delabelIssue,
+  reactIssueComment,
+};
