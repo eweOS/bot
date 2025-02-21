@@ -1,7 +1,8 @@
-import { dispatchRepository } from "../../api/github";
+import { dispatchRepository } from "../../../api/github";
 
 const mod = {
   event: "pull_request",
+  repos: ["eweOS/packages"],
   func: mod_fn,
 };
 
@@ -10,10 +11,11 @@ const condition = ["ready_for_review", "opened", "reopened", "synchronize"];
 const condition_closed = ["closed"];
 
 async function mod_fn(payload) {
-  if (payload.repository.full_name !== "eweOS/packages") return;
   var dispatchoption = "";
   if (condition.includes(payload.action)) dispatchoption = "pr";
-  if (condition_closed.includes(payload.action)) dispatchoption = "pr_closed";
+  else if (condition_closed.includes(payload.action))
+    dispatchoption = "pr_closed";
+  else return;
 
   const pull_request = payload.pull_request;
 

@@ -1,14 +1,13 @@
-import { dispatchOBS } from "../../api/obs";
-import { dispatchRepository } from "../../api/github";
+import { dispatchOBS } from "../../../api/obs";
+import { dispatchRepository } from "../../../api/github";
 
 const mod = {
   event: "push",
+  repos: ["eweOS/packages"],
   func: mod_fn,
 };
 
 async function mod_fn(payload) {
-  if (payload.repository.full_name !== "eweOS/packages") return;
-
   let branch = payload.ref;
 
   if (!branch) return; // No branch specified

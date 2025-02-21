@@ -1,7 +1,8 @@
-import { dispatchRepository, reactIssueComment } from "../../api/github";
+import { dispatchRepository, reactIssueComment } from "../../../api/github";
 
 const mod = {
   event: "issue_comment",
+  repos: ["eweOS/packages"],
   func: mod_fn,
 };
 
@@ -15,7 +16,6 @@ const valid_label = "issue-action: valid";
 const invalid_label = "issue-action: invalid";
 
 async function mod_fn(payload) {
-  if (payload.repository.full_name !== "eweOS/packages") return;
   if ("pull_request" in payload.issue) return;
   if (!condition.includes(payload.action)) return;
   if (

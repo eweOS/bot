@@ -1,7 +1,8 @@
-import { labelIssue, delabelIssue } from "../../api/github";
+import { labelIssue, delabelIssue } from "../../../api/github";
 
 const mod = {
   event: "issues",
+  repos: ["eweOS/packages"],
   func: mod_fn,
 };
 
@@ -38,7 +39,7 @@ async function verify_issue(issue, pkgs) {
 }
 
 async function mod_fn(payload) {
-  if (payload.repository.full_name !== "eweOS/packages") return;
+  if (payload.issue.state != "open") return;
   if (condition.includes(payload.action)) {
     if (
       payload.issue.title.split(" ")[0] == action_add ||
@@ -46,7 +47,9 @@ async function mod_fn(payload) {
     )
       await verify_issue(
         payload.issue.number,
-        payload.issue.title.substring(action_add.length + 1),
+        payload.issue.title.substring(
+          payload.issue.title.split(" ")[0].length + 1,
+        ),
       );
     return;
   }

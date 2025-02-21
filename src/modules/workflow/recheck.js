@@ -1,6 +1,6 @@
 import { getPackagePR } from "../../api/github";
 import { testarg_number } from "../../utils/cmdargs";
-import dispatch_mod from "../dispatch/pull_request.js";
+import dispatch_mod from "../dispatch/packages/pull_request.js";
 import { sendReactionSimple } from "../../api/send";
 
 const mod = {

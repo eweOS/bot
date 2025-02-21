@@ -8,12 +8,17 @@ async function webhookrouter(request) {
     return errResponse("Invalid request");
 
   const hooktype = request.headers.get("X-GitHub-Event");
+  console.log(hooktype);
   if (hooktype in modules) {
-    await modules[hooktype].func(payload);
-    return setResponse("Workflow success!");
-  } else {
-    return errResponse("Unexpected behavior");
+    if (!("repository" in payload)) {
+      await modules[hooktype].func(payload);
+      return setResponse("Workflow success!");
+    } else if (modules[hooktype].repos.includes(payload.repository.full_name)) {
+      await modules[hooktype].func(payload);
+      return setResponse("Workflow success!");
+    }
   }
+  return errResponse("Unexpected behavior");
 }
 
 export { webhookrouter };

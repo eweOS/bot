@@ -21,10 +21,8 @@ async function dispatchWorkflow(workflow, data) {
   ).request(
     `POST /repos/eweOS/workflow/actions/workflows/${workflow}/dispatches`,
     {
-      body: {
-        ref: "master",
-        inputs: data,
-      },
+      ref: "master",
+      inputs: data,
     },
   );
 }
@@ -58,7 +56,7 @@ async function delabelIssue(issue_number, label) {
   return await (
     await initOctokit()
   ).request(
-    `DELETE /repos/eweOS/packages/issues/${issue_number}/labels/${label}`,
+    `DELETE /repos/eweOS/packages/issues/${issue_number}/labels/${encodeURI(label)}`,
   );
 }
 
