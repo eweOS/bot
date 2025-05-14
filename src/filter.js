@@ -5,6 +5,7 @@ function checkmessage(message) {
   const allowed_users = [
     283338155, // @YukariChiba
     5990757608, // @ziyao233
+    1917937007, // @hack3ric
   ];
 
   const allowed_groups = [
