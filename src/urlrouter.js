@@ -1,10 +1,13 @@
 import { registerWebhook, unRegisterWebhook } from "./api/webhook";
 import { messagerouter } from "./router/messagerouter";
 import { webhookrouter } from "./router/webhookrouter";
+import { eurrouter } from "./router/eurrouter";
+import { defaultrouter } from "./router/default";
 
-function urlrouter(request, ctx) {
+function urlrouter(request, env, ctx) {
   const url = new URL(request.url);
   const pathname = url.pathname;
+  if (url.host == "os-eur.ewe.moe") return eurrouter(request, env);
   switch (pathname) {
     case "/endpoint":
       return messagerouter(request, ctx);
@@ -17,10 +20,9 @@ function urlrouter(request, ctx) {
 
     case "/github":
       return webhookrouter(request);
-
-    default:
-      return new Response("No handler for this request");
   }
+
+  return defaultrouter(request);
 }
 
 export { urlrouter };

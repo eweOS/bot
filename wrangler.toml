@@ -1,7 +1,14 @@
 name = "eweos-bot"
 main = "src/index.js"
 compatibility_date = "2024-07-05"
-compatibility_flags = [ "nodejs_compat" ]
+compatibility_flags = ["nodejs_compat"]
+
+routes = [{ pattern = "os-eur.ewe.moe", custom_domain = true }]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "eur"
+database_id = "f7f66322-1b43-4a01-b8d8-f7746ae83d76"
 
 [vars]
 ENV_BOT_WORKFLOW_CHANNEL = "-1002247523652"

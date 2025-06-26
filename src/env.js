@@ -9,6 +9,7 @@ async function setEnv(env) {
   process.env.ENV_GITHUB_APP_ID ??= env.ENV_GITHUB_APP_ID;
   process.env.ENV_GITHUB_APP_KEY ??= env.ENV_GITHUB_APP_KEY;
   process.env.ENV_GITHUB_APP_INSTALL ??= env.ENV_GITHUB_APP_INSTALL;
+  process.env.DB ??= env.DB;
 }
 
 export { setEnv };
