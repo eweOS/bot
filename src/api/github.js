@@ -1,12 +1,12 @@
-import * as process from "node:process";
+import { env } from "cloudflare:workers";
 import { App } from "octokit";
 
 async function initOctokit() {
   const app = new App({
-    appId: process.env.ENV_GITHUB_APP_ID,
-    privateKey: process.env.ENV_GITHUB_APP_KEY,
+    appId: env.ENV_GITHUB_APP_ID,
+    privateKey: env.ENV_GITHUB_APP_KEY,
   });
-  return await app.getInstallationOctokit(process.env.ENV_GITHUB_APP_INSTALL);
+  return await app.getInstallationOctokit(env.ENV_GITHUB_APP_INSTALL);
 }
 
 async function getPackagePR(pr_id) {

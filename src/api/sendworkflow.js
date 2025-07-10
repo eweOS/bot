@@ -1,5 +1,5 @@
 import { sendRichText } from "./send";
-import * as process from "node:process";
+import { env } from "cloudflare:workers";
 
 async function sendWorkflowStatus(status) {
   var txt = "";
@@ -21,7 +21,7 @@ async function sendWorkflowStatus(status) {
   txt += `#${workflow.conclusion} #${workflowid}\n`;
   txt += `<a href="${workflow.html_url}">Workflow URL</a>`;
   let sendresult = await sendRichText(
-    process.env.ENV_BOT_WORKFLOW_CHANNEL,
+    env.ENV_BOT_WORKFLOW_CHANNEL,
     txt,
     null,
     "html",

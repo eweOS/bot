@@ -1,4 +1,4 @@
-import * as process from "node:process";
+import { env } from "cloudflare:workers";
 import { hmacverify } from "./utils/webhooksign";
 
 function checkmessage(message) {
@@ -34,7 +34,7 @@ async function checkwebhook(request, payload) {
   if (!signature) return false;
 
   const ver = await hmacverify(
-    process.env.ENV_GITHUB_WEBHOOK_TOKEN,
+    env.ENV_GITHUB_WEBHOOK_TOKEN,
     JSON.stringify(payload),
     signature.replace("sha1=", "")
   );

@@ -1,4 +1,4 @@
-import * as process from "node:process";
+import { env } from "cloudflare:workers";
 import modules from "../modules/workflow";
 import { checkmessage } from "../filter";
 import { sendReactionSimple } from "../api/send";
@@ -42,7 +42,7 @@ async function messagetyperouter(update) {
 async function messagerouter(request, ctx) {
   if (
     request.headers.get("X-Telegram-Bot-Api-Secret-Token") !==
-    process.env.ENV_BOT_SECRET
+    env.ENV_BOT_SECRET
   ) {
     return new Response("Unauthorized", { status: 403 });
   }

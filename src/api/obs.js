@@ -1,4 +1,4 @@
-import * as process from "node:process";
+import { env } from "cloudflare:workers";
 
 async function dispatchOBS(pkgname) {
   return await fetch(
@@ -7,7 +7,7 @@ async function dispatchOBS(pkgname) {
     {
       method: "POST",
       headers: {
-        Authorization: `Token ${process.env.ENV_OBS_TOKEN}`,
+        Authorization: `Token ${env.ENV_OBS_TOKEN}`,
         "User-Agent": "request",
       },
     }
