@@ -8,7 +8,7 @@ const mod: DispatchMod = {
 	func: mod_fn,
 };
 
-const condition = ['ready_for_review', 'opened', 'reopened', 'synchronize'];
+const condition = ['opened', 'reopened', 'synchronize'];
 
 const condition_closed = ['closed'];
 
