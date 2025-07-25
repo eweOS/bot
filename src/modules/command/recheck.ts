@@ -20,7 +20,7 @@ async function mod_fn(c: Context, message: any, args: any) {
 		return;
 	}
 	const payload = res.data;
-	if (payload.state == 'open' && !payload.draft) {
+	if (payload.state == 'open') {
 		await dispatch_mod.func(c, {
 			action: 'synchronize',
 			repository: { full_name: 'eweOS/packages' },
