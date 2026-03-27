@@ -2,6 +2,7 @@ import { GitHubApi } from '../../../api/github';
 import OBSApi from '../../../api/obs';
 import DispatchMod from '../base';
 import { Context } from 'hono';
+import { TelegramApi } from '../../../api/telegram';
 
 const mod: DispatchMod = {
 	event: 'push',
@@ -21,9 +22,14 @@ async function mod_fn(c: Context, payload: any) {
 
 	const githubApi = new GitHubApi(c.env.ENV_GITHUB_APP_ID, c.env.ENV_GITHUB_APP_KEY, c.env.ENV_GITHUB_APP_INSTALL);
 	const obsApi = new OBSApi(c.env.ENV_OBS_TOKEN);
+	const telegramApi = new TelegramApi(c.env.ENV_BOT_TOKEN);
 
 	if (!payload.created) {
-		await obsApi.dispatchProject('eweOS:Main', pkg_name);
+		const obsResponse = await obsApi.dispatchProject('eweOS:Main', pkg_name);
+		if (obsResponse.status !== 200) {
+			const errorMessage = `🚨 OBS API Error\n\nFailed to dispatch package: ${pkg_name}\n\nStatus: ${obsResponse.status}\nStatus Text: ${obsResponse.statusText}`;
+			await telegramApi.sendPlainText(Number(c.env.ENV_BOT_WORKFLOW_CHANNEL), errorMessage);
+		}
 		await githubApi.dispatchRepository('push', { pkg: pkg_name });
 	} else {
 		await githubApi.dispatchRepository('creation', { pkg: pkg_name });

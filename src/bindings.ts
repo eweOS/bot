@@ -1,4 +1,8 @@
-type Bindings = Record<string, never>;
+type Bindings = {
+	ENV_BOT_TOKEN: string;
+	ENV_GITHUB_APP_KEY: string;
+	ENV_OBS_TOKEN: string;
+};
 
 type Variables = {
 	ENV_BOT_SECRET: string;
