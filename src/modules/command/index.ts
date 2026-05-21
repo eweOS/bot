@@ -5,6 +5,7 @@ import bumprel_mod from "./bumprel";
 import bumpver_mod from "./bumpver";
 import pkginfo_mod from "./pkginfo";
 import recheck_mod from "./recheck";
+import trigger_mod from "./trigger";
 import CommandMod from "./base";
 
 function add_mod(mod: CommandMod) {
@@ -16,5 +17,6 @@ add_mod(bumprel_mod);
 add_mod(bumpver_mod);
 add_mod(pkginfo_mod);
 add_mod(recheck_mod);
+add_mod(trigger_mod);
 
 export default modules;
