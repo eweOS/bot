@@ -31,7 +31,7 @@ async function mod_fn(c: Context, payload: any) {
 			await telegramApi.sendPlainText(Number(c.env.ENV_BOT_WORKFLOW_CHANNEL), errorMessage);
 		}
 		await githubApi.dispatchRepository('push', { pkg: pkg_name });
-	} else {
+	} else if (!payload.deleted) {
 		await githubApi.dispatchRepository('creation', { pkg: pkg_name });
 	}
 }
