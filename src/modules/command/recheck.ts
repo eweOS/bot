@@ -13,11 +13,15 @@ const mod: CommandMod = {
 
 async function mod_fn(c: Context, message: any, args: any) {
 	const githubApi = new GitHubApi(c.env.ENV_GITHUB_APP_ID, c.env.ENV_GITHUB_APP_KEY, c.env.ENV_GITHUB_APP_INSTALL);
-	const res = await githubApi.getPackagePR(args);
 	const telegramApi = new TelegramApi(c.env.ENV_BOT_TOKEN);
-	if (res.status == 404) {
-		await telegramApi.sendReactionSimple(message.chat.id, message.message_id, '🤷');
-		return;
+	let res;
+	try {
+		res = await githubApi.getPackagePR(args);
+	} catch (e: any) {
+		if (e.status == 404 || res == undefined) {
+			await telegramApi.sendReactionSimple(message.chat.id, message.message_id, '🤷');
+			return;
+		}
 	}
 	const payload = res.data;
 	if (payload.state == 'open') {
