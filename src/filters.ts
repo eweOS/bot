@@ -6,6 +6,7 @@ function checkmessage(message: any) {
 		283338155, // @YukariChiba
 		5990757608, // @ziyao233
 		1917937007, // @hack3ric
+		1158479515, // @juliandroske
 	];
 
 	const allowed_groups = [
