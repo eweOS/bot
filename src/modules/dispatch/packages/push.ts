@@ -21,7 +21,7 @@ async function mod_fn(c: Context, payload: any) {
 	if (pkg_name.startsWith('_')) return; // Ignored special branch
 
 	const githubApi = new GitHubApi(c.env.ENV_GITHUB_APP_ID, c.env.ENV_GITHUB_APP_KEY, c.env.ENV_GITHUB_APP_INSTALL);
-	const obsApi = new OBSApi(c.env.ENV_OBS_TOKEN);
+	const obsApi = new OBSApi(c.env.ENV_OBS_TOKEN, c.env.ENV_OBS_PASS);
 	const telegramApi = new TelegramApi(c.env.ENV_BOT_TOKEN);
 
 	if (!payload.created) {
@@ -32,7 +32,11 @@ async function mod_fn(c: Context, payload: any) {
 		}
 		await githubApi.dispatchRepository('push', { pkg: pkg_name });
 	} else if (!payload.deleted) {
-		await githubApi.dispatchRepository('creation', { pkg: pkg_name });
+		const obsResponse = await obsApi.createPackage('eweOS:Main', pkg_name);
+		if (obsResponse.status !== 200 && obsResponse.status !== 201) {
+			const errorMessage = `🚨 OBS API Error\n\nFailed to create package: ${pkg_name}\n\nStatus: ${obsResponse.status}\nStatus Text: ${obsResponse.statusText}`;
+			await telegramApi.sendPlainText(Number(c.env.ENV_BOT_WORKFLOW_CHANNEL), errorMessage);
+		}
 	}
 }
 

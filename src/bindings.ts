@@ -2,6 +2,7 @@ type Bindings = {
 	ENV_BOT_TOKEN: string;
 	ENV_GITHUB_APP_KEY: string;
 	ENV_OBS_TOKEN: string;
+	ENV_OBS_PASS?: string;
 };
 
 type Variables = {
